@@ -5,910 +5,417 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>習慣化ボディトラッカー</title>
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-
-  body {
-    background-color: #0f0f11;
-    color: #f3f4f6;
-    padding: 12px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .app-container {
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  /* 共通カードスタイル */
-  .card {
-    background-color: #18181b;
-    border: 1px solid #27272a;
-    border-radius: 12px;
-    padding: 14px;
-  }
-
-  /* ヘッダー＆目標 */
-  .header-card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .app-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  .app-subtitle {
-    font-size: 11px;
-    color: #a1a1aa;
-    margin-top: 2px;
-  }
-
-  .btn-target-edit {
-    background-color: #27272a;
-    color: #d4d4d8;
-    border: 1px solid #3f3f46;
-    padding: 5px 10px;
-    border-radius: 16px;
-    font-size: 11px;
-    cursor: pointer;
-  }
-
-  .target-box {
-    background-color: #202024;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 13px;
-    color: #e4e4e7;
-    line-height: 1.4;
-  }
-
-  .target-label {
-    font-weight: bold;
-    color: #a1a1aa;
-    margin-right: 6px;
-  }
-
-  /* 月選択タブ */
-  .month-tabs {
-    display: flex;
-    background-color: #202024;
-    border-radius: 10px;
-    padding: 3px;
-    gap: 4px;
-  }
-
-  .month-tab {
-    flex: 1;
-    text-align: center;
-    padding: 7px 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: #a1a1aa;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .month-tab.active {
-    background-color: #27272a;
-    color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-
-  /* カレンダー */
-  .calendar-card {
-    padding: 12px 8px;
-  }
-
-  .week-days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    font-size: 11px;
-    color: #71717a;
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-
-  .days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-  }
-
-  .day-cell {
-    aspect-ratio: 0.85;
-    background-color: #202024;
-    border-radius: 6px;
-    padding: 2px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.15s;
-    min-width: 0;
-  }
-
-  .day-cell.other-month {
-    opacity: 0.25;
-  }
-
-  .day-cell.selected {
-    background-color: #1e3a8a;
-    border-color: #3b82f6;
-  }
-
-  .day-num {
-    font-size: 11px;
-    font-weight: 600;
-    color: #e4e4e7;
-    line-height: 1;
-    margin-top: 2px;
-  }
-
-  .week-badge {
-    font-size: 8px;
-    background-color: #27272a;
-    color: #a1a1aa;
-    padding: 1px 3px;
-    border-radius: 3px;
-    line-height: 1;
-  }
-
-  .day-cell.selected .week-badge {
-    background-color: #2563eb;
-    color: #ffffff;
-  }
-
-  .stamp-badge {
-    font-size: 9px;
-    font-weight: bold;
-    color: #4ade80;
-    line-height: 1;
-    margin-bottom: 2px;
-  }
-
-  /* 選択日＆進捗表示 */
-  .selected-date-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .date-title-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .date-text {
-    font-size: 14px;
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  .week-tag {
-    background-color: #27272a;
-    color: #4ade80;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-weight: 600;
-  }
-
-  .progress-percent {
-    font-size: 11px;
-    color: #a1a1aa;
-    font-weight: 600;
-  }
-
-  .progress-bar-bg {
-    width: 100%;
-    height: 4px;
-    background-color: #27272a;
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 12px;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background-color: #22c55e;
-    width: 0%;
-    transition: width 0.3s ease;
-  }
-
-  /* タスクエリア */
-  .task-list-container {
-    background-color: #141417;
-    border: 1px solid #166534;
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .task-card {
-    background-color: #18181b;
-    border: 1px solid #22c55e;
-    border-radius: 8px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .task-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .task-checkbox {
-    width: 22px;
-    height: 22px;
-    border: 2px solid #22c55e;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    margin-top: 2px;
-    background-color: transparent;
-  }
-
-  .task-checkbox.checked {
-    background-color: #22c55e;
-  }
-
-  .task-checkbox.checked::after {
-    content: "✓";
-    color: #000000;
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  .task-title-area {
-    flex: 1;
-  }
-
-  .task-title {
-    font-size: 13px;
-    font-weight: bold;
-    color: #ffffff;
-    line-height: 1.3;
-  }
-
-  .task-actions {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-
-  .btn-action {
-    background: none;
-    border: none;
-    color: #71717a;
-    font-size: 11px;
-    cursor: pointer;
-    padding: 2px;
-  }
-
-  .btn-action:hover {
-    color: #d4d4d8;
-  }
-
-  /* 修正ポイント：1行ずつハッキリ見せる構造 */
-  .task-details-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: 2px;
-    padding-left: 32px;
-  }
-
-  .info-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 6px;
-    font-size: 11px;
-    line-height: 1.4;
-  }
-
-  .info-label {
-    color: #4ade80;
-    font-weight: 600;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .info-val {
-    color: #d4d4d8;
-    word-break: break-word;
-  }
-
-  /* アコーディオン (やり方・コツ) */
-  details.task-accordion {
-    padding-left: 32px;
-    margin-top: 2px;
-  }
-
-  details.task-accordion summary {
-    font-size: 11px;
-    color: #60a5fa;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-  }
-
-  details.task-accordion summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .accordion-content {
-    margin-top: 6px;
-    background-color: #202024;
-    border-radius: 6px;
-    padding: 8px;
-    font-size: 11px;
-    color: #a1a1aa;
-    line-height: 1.4;
-  }
-
-  /* タスク追加ボタン */
-  .btn-add-task {
-    background: transparent;
-    border: 1px dashed #27272a;
-    color: #a1a1aa;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    width: 100%;
-    transition: all 0.2s;
-  }
-
-  .btn-add-task:hover {
-    border-color: #22c55e;
-    color: #22c55e;
-  }
-
-  /* モーダル */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 16px;
-  }
-
-  .modal-card {
-    background-color: #18181b;
-    border: 1px solid #3f3f46;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 380px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .modal-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  .modal-field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .modal-label {
-    font-size: 11px;
-    color: #a1a1aa;
-  }
-
-  .modal-input, .modal-textarea {
-    background-color: #202024;
-    border: 1px solid #27272a;
-    border-radius: 6px;
-    color: #ffffff;
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .modal-textarea {
-    resize: vertical;
-    min-height: 50px;
-  }
-
-  .modal-btns {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 4px;
-  }
-
-  .btn-modal {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-  }
-
-  .btn-modal-cancel {
-    background-color: #27272a;
-    color: #d4d4d8;
-  }
-
-  .btn-modal-save {
-    background-color: #22c55e;
-    color: #000000;
-    font-weight: bold;
-  }
-
-  .hidden {
-    display: none !important;
-  }
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+body{background:#0f0f11;color:#f3f4f6;padding:12px;display:flex;justify-content:center}
+.app{width:100%;max-width:420px;display:flex;flex-direction:column;gap:12px}
+.card{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:14px}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.title{font-size:18px;font-weight:bold}
+.sub{font-size:12px;color:#a1a1aa;margin-top:2px}
+.pill{background:#27272a;color:#d4d4d8;border:1px solid #3f3f46;padding:5px 10px;border-radius:16px;font-size:12px;cursor:pointer;flex-shrink:0}
+.box{background:#202024;border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.5;margin-top:10px}
+.lbl{font-weight:bold;color:#a1a1aa;margin-right:6px}
+.reason{border-color:#854d0e;background:#1c1917}
+.reason .lbl{color:#facc15}
+.reason-text{font-size:15px;line-height:1.6;margin-top:8px;white-space:pre-wrap}
+.reason-empty{color:#a1a1aa;font-size:13px}
+.tabs{display:flex;background:#202024;border-radius:10px;padding:3px;gap:4px}
+.tab{flex:1;text-align:center;padding:8px 0;font-size:14px;font-weight:600;color:#a1a1aa;border-radius:8px;cursor:pointer}
+.tab.active{background:#27272a;color:#fff}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:#71717a;margin-bottom:6px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cell{aspect-ratio:.85;background:#202024;border-radius:6px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer;border:1px solid transparent;min-width:0}
+.cell.other{opacity:.25}
+.cell.sel{background:#1e3a8a;border-color:#3b82f6}
+.cell.today .n{color:#facc15}
+.n{font-size:12px;font-weight:600;margin-top:2px;line-height:1}
+.wb{font-size:9px;background:#27272a;color:#a1a1aa;padding:1px 3px;border-radius:3px;line-height:1}
+.stamp{font-size:10px;font-weight:bold;color:#4ade80;line-height:1;margin-bottom:2px}
+.tasks{background:#141417;border:1px solid #166534;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.bar-top{display:flex;justify-content:space-between;align-items:center}
+.date{font-size:15px;font-weight:bold}
+.wtag{background:#27272a;color:#4ade80;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600;margin-left:8px}
+.pct{font-size:12px;color:#a1a1aa;font-weight:600}
+.bar{height:4px;background:#27272a;border-radius:2px;overflow:hidden}
+.fill{height:100%;background:#22c55e;width:0;transition:width .3s}
+#taskList{display:flex;flex-direction:column;gap:10px}
+.task{background:#18181b;border:1px solid #22c55e;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.th{display:flex;align-items:flex-start;gap:10px}
+.chk{width:24px;height:24px;border:2px solid #22c55e;border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.chk.on{background:#22c55e}
+.chk.on::after{content:"✓";color:#000;font-weight:bold;font-size:15px}
+.tt{flex:1;font-size:14px;font-weight:bold;line-height:1.3}
+.act{display:flex;gap:8px}
+.act button{background:none;border:none;color:#71717a;font-size:12px;cursor:pointer;padding:2px}
+.info{padding-left:34px;display:flex;flex-direction:column;gap:4px}
+.ir{display:flex;gap:6px;font-size:12px;line-height:1.45}
+.il{color:#4ade80;font-weight:600;white-space:nowrap}
+.iv{color:#d4d4d8;word-break:break-word}
+.why{margin-left:34px;background:#1c1917;border-left:3px solid #facc15;border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.55;color:#e7e5e4}
+.why b{color:#facc15;display:block;margin-bottom:2px}
+details{padding-left:34px}
+summary{font-size:12px;color:#60a5fa;cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+.acc{margin-top:6px;background:#202024;border-radius:6px;padding:8px;font-size:12px;color:#a1a1aa;line-height:1.5}
+.add{background:transparent;border:1px dashed #27272a;color:#a1a1aa;padding:12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;width:100%}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:9;padding:16px}
+.modal{background:#18181b;border:1px solid #3f3f46;border-radius:12px;width:100%;max-width:380px;max-height:92vh;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.mt{font-size:15px;font-weight:bold}
+.f{display:flex;flex-direction:column;gap:4px}
+.f label{font-size:12px;color:#a1a1aa}
+.f input,.f textarea{background:#202024;border:1px solid #27272a;border-radius:6px;color:#fff;padding:9px;font-size:14px}
+.f textarea{resize:vertical;min-height:70px}
+.hint{font-size:12px;color:#a1a1aa;line-height:1.5}
+.mb{display:flex;justify-content:flex-end;gap:8px}
+.mb button{padding:8px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:none;background:#27272a;color:#d4d4d8}
+.mb .save{background:#22c55e;color:#000;font-weight:bold}
+.st-row{display:flex;gap:8px}
+.st{flex:1;background:#202024;border-radius:8px;padding:8px 4px;text-align:center}
+.st b{display:block;font-size:17px}
+.st span{font-size:11px;color:#a1a1aa}
+.cap{font-size:11px;color:#a1a1aa;margin:12px 0 6px}
+.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:3px}
+.sb{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.sbf{width:100%;height:44px;background:#202024;border-radius:3px;display:flex;align-items:flex-end;overflow:hidden}
+.sbf i{display:block;width:100%;background:#22c55e}
+.sb span{font-size:10px;color:#71717a}
+.sb.cur .sbf{outline:1px solid #facc15}
+.sb.cur span{color:#facc15;font-weight:bold}
+.apply{display:flex;align-items:center;gap:8px;font-size:13px;color:#e4e4e7;line-height:1.4}
+.apply input{width:18px;height:18px;flex-shrink:0}
+.delweek{background:none;border:1px solid #7f1d1d;color:#f87171;border-radius:6px;padding:8px;font-size:12px;cursor:pointer}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
+<div class="app">
 
-<div class="app-container">
-
-  <!-- ヘッダー＆目標カード -->
-  <div class="card header-card">
-    <div class="header-top">
+  <div class="card">
+    <div class="row">
       <div>
-        <div class="app-title">習慣化トラッカー</div>
-        <div class="app-subtitle">行動科学に基づく14週間プログラム (2026年10月〜12月)</div>
+        <div class="title">習慣化トラッカー</div>
+        <div class="sub">14週間プログラム (2026年10月〜12月)</div>
       </div>
-      <button class="btn-target-edit" onclick="openTargetModal()">目標編集</button>
+      <button class="pill" onclick="openText('target')">目標編集</button>
     </div>
-    <div class="target-box">
-      <span class="target-label">現在の目標:</span><span id="targetText">12月末までにウエスト-3cm & 胸元引き締め</span>
-    </div>
+    <div class="box"><span class="lbl">目標:</span><span id="targetText"></span></div>
   </div>
 
-  <!-- 月切替タブ -->
-  <div class="month-tabs">
-    <div class="month-tab active" onclick="switchMonth(10)">10月</div>
-    <div class="month-tab" onclick="switchMonth(11)">11月</div>
-    <div class="month-tab" onclick="switchMonth(12)">12月</div>
+  <!-- 自分の理由 -->
+  <div class="card reason">
+    <div class="row">
+      <span class="lbl">💡 私がこれをやる理由</span>
+      <button class="pill" onclick="openText('reason')">書く・直す</button>
+    </div>
+    <div class="reason-text" id="reasonText"></div>
   </div>
 
-  <!-- 上部月次カレンダー -->
-  <div class="card calendar-card">
-    <div class="week-days-grid">
-      <div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>
-    </div>
-    <div class="days-grid" id="calendarDaysGrid"></div>
+  <div class="card" id="stats"></div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchMonth(10)">10月</div>
+    <div class="tab" onclick="switchMonth(11)">11月</div>
+    <div class="tab" onclick="switchMonth(12)">12月</div>
   </div>
 
-  <!-- 日次タスクエリア -->
-  <div class="task-list-container">
-    <div class="selected-date-bar">
-      <div class="date-title-group">
-        <span class="date-text" id="selectedDateTitle">2026年10月1日 (木)</span>
-        <span class="week-tag" id="selectedWeekTag">Week 1</span>
-      </div>
-      <span class="progress-percent" id="progressPercent">0%</span>
-    </div>
+  <div class="card" style="padding:12px 8px">
+    <div class="wk"><div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div></div>
+    <div class="grid" id="grid"></div>
+  </div>
 
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressBarFill"></div>
+  <div class="tasks">
+    <div class="bar-top">
+      <div><span class="date" id="dateTitle"></span><span class="wtag" id="weekTag"></span></div>
+      <span class="pct" id="pct">0%</span>
     </div>
-
+    <div class="bar"><div class="fill" id="fill"></div></div>
     <div id="taskList"></div>
-
-    <button class="btn-add-task" onclick="openTaskModal(null)">＋ 新しいタスクを追加</button>
+    <button class="add" onclick="openTask(null)">＋ 新しいタスクを追加</button>
   </div>
-
 </div>
 
-<!-- 目標編集モーダル -->
-<div class="modal-overlay hidden" id="targetModal">
-  <div class="modal-card">
-    <div class="modal-title">目標の編集</div>
-    <div class="modal-field">
-      <label class="modal-label">目標内容</label>
-      <input type="text" class="modal-input" id="targetInput" value="">
-    </div>
-    <div class="modal-btns">
-      <button class="btn-modal btn-modal-cancel" onclick="closeTargetModal()">キャンセル</button>
-      <button class="btn-modal btn-modal-save" onclick="saveTarget()">保存</button>
+<!-- 目標・理由 共通モーダル -->
+<div class="ov hidden" id="textModal">
+  <div class="modal">
+    <div class="mt" id="textTitle"></div>
+    <div class="hint" id="textHint"></div>
+    <div class="f"><textarea id="textInput" rows="4"></textarea></div>
+    <div class="mb">
+      <button onclick="closeText()">キャンセル</button>
+      <button class="save" onclick="saveText()">保存</button>
     </div>
   </div>
 </div>
 
-<!-- タスク編集・追加モーダル -->
-<div class="modal-overlay hidden" id="taskModal">
-  <div class="modal-card">
-    <div class="modal-title" id="taskModalTitle">タスクの編集</div>
-    <div class="modal-field">
-      <label class="modal-label">タスク名</label>
-      <input type="text" class="modal-input" id="modalTaskTitle">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">きっかけ（トリガー）</label>
-      <input type="text" class="modal-input" id="modalTaskTrigger">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">部位 / 効果</label>
-      <input type="text" class="modal-input" id="modalTaskEffect">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">やり方・コツ</label>
-      <textarea class="modal-textarea" id="modalTaskGuide"></textarea>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-modal btn-modal-cancel" onclick="closeTaskModal()">キャンセル</button>
-      <button class="btn-modal btn-modal-save" onclick="saveTaskModal()">保存</button>
+<!-- タスクモーダル -->
+<div class="ov hidden" id="taskModal">
+  <div class="modal">
+    <div class="mt" id="taskModalTitle"></div>
+    <div class="f"><label>タスク名</label><input id="mTitle"></div>
+    <div class="f"><label>きっかけ（トリガー）</label><input id="mTrigger"></div>
+    <div class="f"><label>部位 / 効果</label><input id="mEffect"></div>
+    <div class="f"><label>なぜやる？（できること・できないことを正直に）</label><textarea id="mWhy"></textarea></div>
+    <div class="f"><label>やり方・コツ</label><textarea id="mGuide"></textarea></div>
+    <label class="apply"><input type="checkbox" id="mApplyWeek" checked><span id="mApplyLabel"></span></label>
+    <button class="delweek hidden" id="mDelWeek" onclick="deleteWeek()">この週の全日から削除する</button>
+    <div class="mb">
+      <button onclick="closeTask()">キャンセル</button>
+      <button class="save" onclick="saveTask()">保存</button>
     </div>
   </div>
 </div>
 
 <script>
-  // 週別プログラムデータ（Week 1〜14）
-  const programData = {
-    1: [
-      { id: 'w1_1', title: '朝起きてすぐのドローイン (30秒×2)', trigger: 'ベッドから出た直後', effect: '腹横筋（ぽっこりお腹解消）', guide: '仰向けまたは立ち姿勢で、息を吐き切りながらお腹を背中に近づけるように深く凹ませてキープ。' },
-      { id: 'w1_2', title: 'デスク胸開きストレッチ (30秒)', trigger: 'PC作業を開始する直前', effect: '大胸筋ストレッチ（猫背改善）', guide: '背中側で両手を組み、胸を大きく張りながら息を吐く。肩甲骨を引き寄せる意識で行う。' },
-      { id: 'w1_3', title: 'ハーフスクワット', trigger: 'トイレ', effect: '太もも、お尻に効く', guide: 'トイレの後のスクワット！' }
-    ],
-    2: [
-      { id: 'w2_1', title: '壁押しアイソメトリックス (10秒×3)', trigger: 'キッチンで湯沸かし中', effect: '大胸筋上部（胸元引き締め）', guide: '壁に向かって立ち、両手を胸の高さについて全力で壁を押し込む。胸に意識を集中。' },
-      { id: 'w2_2', title: '椅子座りレッグレイズ (10回)', trigger: '着席して作業に入る直前', effect: '腹直筋下部（下腹撃退）', guide: '浅く腰掛け、両脚を揃えて浮かせ、お腹の力で引き上げる。' },
-      { id: 'w2_3', title: '階段利用時のドローイン歩行', trigger: '階段を登る時', effect: '体幹コア＆代謝UP', guide: 'お腹を軽く凹ませた状態をキープしながら一歩一歩登る。' }
-    ],
-    3: [
-      { id: 'w3_1', title: 'ドアノブプッシュアップ (10回)', trigger: '部屋のドアを開けるとき', effect: '大胸筋（バストアップ＆姿勢改善）', guide: 'ドア枠や壁を使って斜め腕立て伏せ。胸を壁に近づける時に息を吸う。' },
-      { id: 'w3_2', title: '立ち姿勢シーテッドクランチ (12回)', trigger: 'トイレで手を洗った直後', effect: '腹直筋上部（お腹上部）', guide: '立って両手を頭の後ろに置き、お腹を丸めるように肋骨と骨盤を近づける。' },
-      { id: 'w3_3', title: '食後の胸張りウォーキング (1分)', trigger: '昼食を終えた直後', effect: '胸郭拡大＆姿勢リセット', guide: '胸を軽く張り、肩甲骨を下げて1分間部屋の中を歩く。' }
-    ],
-    4: [
-      { id: 'w4_1', title: '壁腕立て伏せ (12回)', trigger: 'トイレから出た直後', effect: '大胸筋全体', guide: '壁から一歩離れ、手幅を肩幅より広くしてゆっくり肘を曲げて押す。' },
-      { id: 'w4_2', title: 'ドローインキープ (45秒)', trigger: '帰宅してソファに座る直前', effect: 'インナーマッスル強化', guide: 'お腹をしっかり引っ込めたまま、浅い胸式呼吸を繰り返す。' },
-      { id: 'w4_3', title: '肩甲骨はがし回旋 (15回)', trigger: '入浴前', effect: '胸背部血流促進', guide: '両手先を肩に置き、肘で大きな円を描くように前後に回す。' }
-    ]
-  };
+const programData = {};
+for (let w = 1; w <= 14; w++) {
+  const ph = w <= 3 ? 1 : w <= 7 ? 2 : w <= 11 ? 3 : 4;
+  const pick = (arr, start) => arr[w - start];
+  const push = [
+    { t: '壁プッシュアップ', r: pick([8,10,12], 1), tr: 'コーヒーや湯沸かしの待ち時間', g: '壁から一歩離れ、手は肩幅より少し広く。体を一直線に保ち、胸を壁に近づけて戻す。終わったら両手を後ろで組んで胸を開く。', w: '胸を鍛える最短ルート。負荷の軽い壁から始めて、まず「毎日やる」を優先します。筋肉は楽な回数でも使えば反応しますが、胸の見た目の変化には2〜3か月かかります。' },
+    { t: '斜めプッシュアップ（キッチンカウンター）', r: pick([6,8,10,12], 4), tr: 'コーヒーや湯沸かしの待ち時間', g: 'カウンターや机の縁に手をつき、体を一直線に。胸を縁に近づけて戻す。終わったら両手を後ろで組んで胸を開く。', w: '壁より一段負荷を上げます。回数が増えていくのが目に見える進歩で、これが続ける支えになります。' },
+    { t: '座面プッシュアップ（ソファ・低い台）', r: pick([8,10,12,14], 8), tr: 'コーヒーや湯沸かしの待ち時間', g: 'ソファの座面など低めの台に手をつく。お腹を軽く締め、胸を台に近づけて戻す。', w: '台を低くするほど胸への負荷が増します。ここまで来ると、胸まわりの筋力がはっきり変わってきているはずです。' },
+    { t: '膝つきプッシュアップ（床）', r: pick([8,10,12], 12), tr: 'コーヒーや湯沸かしの待ち時間', g: '床に膝をつき、頭から膝まで一直線。胸が床の手前まで下りたら押し返す。', w: '床で行う最終段階です。無理なく回数を積めるなら、胸元の引き締まり方に差が出る時期です。' }
+  ][ph - 1];
+  const squat = [
+    { t: '椅子の立ち座り', r: pick([5,8,10], 1) + '回', g: '椅子に浅く座り、手を使わずに立って座る。膝はつま先と同じ向きに。', w: '太もも・お尻は体で最も大きな筋肉群です。ここを使うと消費エネルギーが増え、歩くのも楽になります。ただし脚の運動で腹だけが痩せることはありません。' },
+    { t: 'スクワット', r: pick([8,10,12,15], 4) + '回', g: '足は肩幅。椅子に座る要領で腰を落とし、かかとで床を押して立つ。膝が内に入らないように。', w: '立ち座りから一段上げました。大きな筋肉を動かすので、少ない回数でも効率的です。' },
+    { t: 'ゆっくりスクワット（3秒で下ろす）', r: pick([8,10,12,12], 8) + '回', g: '3秒かけて腰を落とし、1秒で立つ。息は止めずに、落とす時に吐く。', w: '回数を増やす代わりに「下ろす速度」で負荷を上げる方法です。筋肉への刺激が強まります。' },
+    { t: '片脚を前に出すスクワット（左右各）', r: pick([6,8,10], 12) + '回', g: '壁や椅子に手を添えてよい。片脚を前に出して腰を真下に落とし、前脚で押して戻る。', w: '片脚に体重が乗ることで負荷が増し、バランスも鍛えられます。最終段階です。' }
+  ][ph - 1];
+  const walk = [
+    { t: '夕食後の散歩', r: pick([5,7,10], 1) + '分', g: '「食べ終わったら靴を履く」ことだけ決める。近所を一周するだけで十分。', w: 'ウエストを左右するのは日々の活動量と食事です。食後に歩くと血糖の上がり方がゆるやかになるとされ、ジムより続けやすい方法です。' },
+    { t: '夕食後の散歩', r: pick([10,12,15,15], 4) + '分', g: '食べ終わったら靴を履く。歩幅を少し広めに、背筋を伸ばして。', w: '時間を少しずつ延ばしています。毎日の活動量が増えることが、ウエストに一番効く土台です。' },
+    { t: '夕食後の早歩き', r: pick([15,15,20,20], 8) + '分', g: '会話はできるが少し息が弾む速さで。時計を見ずにスマホのタイマーだけセット。', w: '同じ時間でも速く歩くほど消費が増えます。筋トレで作った体を、活動量で「絞る」段階です。' },
+    { t: '夕食後の早歩き', r: pick([20,20,25], 12) + '分', g: '会話はできるが少し息が弾む速さで。天気が悪い日は家の中で足踏みでも可。', w: '習慣として定着した活動量を維持・微増させる段階です。数値が動くかは食事・睡眠との合計次第なので、2週間ごとの測定で確認します。' }
+  ][ph - 1];
+  programData[w] = [
+    { id: `w${w}_1`, title: '歯磨き中のカーフレイズ＋ドローイン', trigger: '歯を磨いている間（2分）', effect: 'ふくらはぎ・お腹まわりのインナーマッスル',
+      why: '追加の時間がゼロの習慣です。消費カロリーは小さいので、目的は「毎日必ずやる最小の型」を作ること。この型が、他の習慣を続ける土台になります。',
+      guide: '歯を磨きながら、かかとをゆっくり上げ下げ。お腹は軽く凹ませたままで、呼吸は止めない。' },
+    { id: `w${w}_2`, title: `${push.t} (${push.r}回)`, trigger: push.tr, effect: '大胸筋・肩・二の腕（胸元の引き締め）', why: push.w, guide: push.g },
+    { id: `w${w}_3`, title: `${squat.t} (${squat.r})`, trigger: 'トイレの後', effect: '太もも・お尻（全身の消費を底上げ）', why: squat.w, guide: squat.g },
+    { id: `w${w}_4`, title: `${walk.t} (${walk.r})`, trigger: '夕食を食べ終えた直後', effect: '全身の活動量（ウエストに最も効く土台）', why: walk.w, guide: walk.g }
+  ];
+}
+const whyDefaults = {};
+Object.values(programData).flat().forEach(t => whyDefaults[t.id] = t.why);
 
-  // Week 5〜14用のデフォルト補完データ生成
-  for (let w = 5; w <= 14; w++) {
-    programData[w] = [
-      { id: `w${w}_1`, title: `膝つきプッシュアップ (${8 + w - 4}回)`, trigger: 'お風呂に入る前', effect: '大胸筋強化＆代謝UP', guide: '膝をついた状態で手幅を広めに取り、胸が床につくギリギリまで下ろす。' },
-      { id: `w${w}_2`, title: `ニーアップクランチ (${10 + w - 4}回)`, trigger: '夜着替える時', effect: '腹直筋・腹斜筋', guide: '仰向けで膝を立て、お腹をのぞき込むように上体を起こして収縮させる。' },
-      { id: `w${w}_3`, title: `ハイプランクキープ (${20 + (w-4)*5}秒)`, trigger: 'テレビのCM中', effect: '体幹全体＆胸部維持', guide: '腕立て伏せの姿勢で頭からかかとまで一直線を保つ。' }
-    ];
+let currentMonth = 10, selected = '2026-10-01', customTasks = {}, editingId = null, textKind = null;
+let targetGoal = '12月末までにウエスト-3cm & 胸元引き締め', myReason = '';
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+
+function saveData() {
+  try {
+    localStorage.setItem('bodyTracker_customTasks', JSON.stringify(customTasks));
+    localStorage.setItem('bodyTracker_targetGoal', targetGoal);
+    localStorage.setItem('bodyTracker_myReason', myReason);
+  } catch (e) {}
+}
+function loadData() {
+  try {
+    const t = localStorage.getItem('bodyTracker_customTasks'); if (t) customTasks = JSON.parse(t);
+    const g = localStorage.getItem('bodyTracker_targetGoal'); if (g) targetGoal = g;
+    const r = localStorage.getItem('bodyTracker_myReason'); if (r) myReason = r;
+  } catch (e) {}
+}
+
+function renderHeader() {
+  $('targetText').textContent = targetGoal;
+  const el = $('reasonText');
+  if (myReason) { el.className = 'reason-text'; el.textContent = myReason; }
+  else { el.className = 'reason-text reason-empty'; el.textContent = '迷った日に最初に読む、自分への一言を書いておこう。（例：階段で息切れしない自分になりたい）'; }
+}
+
+window.onload = () => {
+  loadData();
+  renderHeader();
+  const now = new Date();
+  if (now.getFullYear() === 2026 && now.getMonth() >= 9) {
+    currentMonth = now.getMonth() + 1;
+    selected = `2026-${pad(currentMonth)}-${pad(now.getDate())}`;
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === currentMonth - 10));
   }
+  selectDate(selected);
+};
 
-  // アプリの状態
-  let currentMonth = 10;
-  let selectedDateStr = "2026-10-01"; // YYYY-MM-DD
-  let customTasks = {}; // 日付ごとのカスタム/完了タスクデータ { "2026-10-01": [ ... ] }
-  let targetGoal = "12月末までにウエスト-3cm & 胸元引き締め";
-  let editingTaskId = null;
+function switchMonth(m) {
+  currentMonth = m;
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === m - 10));
+  renderCalendar();
+}
 
-  // データ保存（localStorage）
-  function saveData() {
-    try {
-      localStorage.setItem('bodyTracker_customTasks', JSON.stringify(customTasks));
-      localStorage.setItem('bodyTracker_targetGoal', targetGoal);
-    } catch (e) {
-      console.error('データの保存に失敗しました:', e);
-    }
+function getWeek(y, m, d) {
+  const diff = Math.floor((new Date(y, m - 1, d) - new Date(2026, 9, 1)) / 864e5);
+  return diff < 0 ? 1 : Math.min(14, Math.floor(diff / 7) + 1);
+}
+
+function todayStr() { const n = new Date(); return `${n.getFullYear()}-${pad(n.getMonth() + 1)}-${pad(n.getDate())}`; }
+
+function renderCalendar() {
+  const grid = $('grid'); grid.innerHTML = '';
+  const y = 2026, first = new Date(y, currentMonth - 1, 1).getDay(), days = new Date(y, currentMonth, 0).getDate();
+  const prev = new Date(y, currentMonth - 1, 0).getDate();
+  for (let i = first - 1; i >= 0; i--) {
+    const c = document.createElement('div'); c.className = 'cell other';
+    c.innerHTML = `<span class="n">${prev - i}</span>`; grid.appendChild(c);
   }
-
-  // データ読み込み（localStorage）
-  function loadData() {
-    try {
-      const savedTasks = localStorage.getItem('bodyTracker_customTasks');
-      if (savedTasks) {
-        customTasks = JSON.parse(savedTasks);
-      }
-      const savedGoal = localStorage.getItem('bodyTracker_targetGoal');
-      if (savedGoal) {
-        targetGoal = savedGoal;
-        document.getElementById('targetText').innerText = targetGoal;
-      }
-    } catch (e) {
-      console.error('データの読み込みに失敗しました:', e);
-    }
+  for (let d = 1; d <= days; d++) {
+    const ds = `${y}-${pad(currentMonth)}-${pad(d)}`;
+    const c = document.createElement('div');
+    c.className = 'cell' + (ds === selected ? ' sel' : '') + (ds === todayStr() ? ' today' : '');
+    const t = customTasks[ds];
+    const done = t && t.length > 0 && t.every(x => x.completed);
+    c.innerHTML = `<span class="n">${d}</span><span class="wb">W${getWeek(y, currentMonth, d)}</span>${done ? '<span class="stamp">済</span>' : '<span></span>'}`;
+    c.onclick = () => selectDate(ds);
+    grid.appendChild(c);
   }
+}
 
-  // 初期化
-  window.onload = function() {
-    loadData();
-    renderCalendar();
-    selectDate("2026-10-01");
-  };
+function selectDate(ds) { selected = ds; renderCalendar(); renderTasks(); }
 
-  function switchMonth(m) {
-    currentMonth = m;
-    document.querySelectorAll('.month-tab').forEach((tab, idx) => {
-      tab.classList.toggle('active', (m === 10 && idx === 0) || (m === 11 && idx === 1) || (m === 12 && idx === 2));
-    });
-    renderCalendar();
+function getTasks(ds) {
+  if (!customTasks[ds]) {
+    const p = ds.split('-').map(Number);
+    customTasks[ds] = (programData[getWeek(p[0], p[1], p[2])] || programData[1]).map(t => ({ ...t, completed: false }));
   }
+  return customTasks[ds];
+}
 
-  // 日付から該当するWeek(1〜14)を計算
-  function getWeekNumber(year, month, day) {
-    const start = new Date(2026, 9, 1); // 2026/10/01
-    const current = new Date(year, month - 1, day);
-    const diffTime = current - start;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays < 0) return 1;
-    const w = Math.floor(diffDays / 7) + 1;
-    return w > 14 ? 14 : w;
+function renderTasks() {
+  const [y, m, d] = selected.split('-').map(Number);
+  const w = getWeek(y, m, d);
+  $('dateTitle').textContent = `${y}年${m}月${d}日 (${'日月火水木金土'[new Date(y, m - 1, d).getDay()]})`;
+  $('weekTag').textContent = `Week ${w}`;
+  const tasks = getTasks(selected);
+  const pct = tasks.length ? Math.round(tasks.filter(t => t.completed).length / tasks.length * 100) : 0;
+  $('pct').textContent = pct + '%';
+  $('fill').style.width = pct + '%';
+  renderStats();
+
+  const box = $('taskList'); box.innerHTML = '';
+  tasks.forEach(t => {
+    const why = t.why ?? whyDefaults[t.id] ?? '';
+    const el = document.createElement('div'); el.className = 'task';
+    el.innerHTML = `
+      <div class="th">
+        <div class="chk ${t.completed ? 'on' : ''}" onclick="toggleTask('${esc(t.id)}')"></div>
+        <div class="tt">${esc(t.title)}</div>
+        <div class="act"><button onclick="openTask('${esc(t.id)}')">編集</button><button onclick="deleteTask('${esc(t.id)}')">削除</button></div>
+      </div>
+      <div class="info">
+        <div class="ir"><span class="il">きっかけ:</span><span class="iv">${esc(t.trigger) || '未設定'}</span></div>
+        <div class="ir"><span class="il">部位/効果:</span><span class="iv">${esc(t.effect) || '未設定'}</span></div>
+      </div>
+      ${why ? `<div class="why"><b>なぜやる？</b>${esc(why)}</div>` : ''}
+      ${t.guide ? `<details><summary>▼ やり方・コツを見る</summary><div class="acc">${esc(t.guide)}</div></details>` : ''}`;
+    box.appendChild(el);
+  });
+}
+
+function curWeek() { const [y, m, d] = selected.split('-').map(Number); return getWeek(y, m, d); }
+function weekDates(w) {
+  const out = [];
+  for (let i = 0; i < 7; i++) {
+    const dt = new Date(2026, 9, 1 + (w - 1) * 7 + i);
+    const ds = `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+    if (ds <= '2026-12-31') out.push(ds);
   }
-
-  // カレンダー描画
-  function renderCalendar() {
-    const grid = document.getElementById('calendarDaysGrid');
-    grid.innerHTML = '';
-
-    const year = 2026;
-    const firstDay = new Date(year, currentMonth - 1, 1).getDay(); // 曜日のオフセット
-    const daysInMonth = new Date(year, currentMonth, 0).getDate();
-
-    // 前月の空白埋め
-    const prevMonthDays = new Date(year, currentMonth - 1, 0).getDate();
-    for (let i = firstDay - 1; i >= 0; i--) {
-      const cell = document.createElement('div');
-      cell.className = 'day-cell other-month';
-      cell.innerHTML = `<span class="day-num">${prevMonthDays - i}</span>`;
-      grid.appendChild(cell);
-    }
-
-    // 今月の日付
-    for (let d = 1; d <= daysInMonth; d++) {
-      const dateStr = `${year}-${String(currentMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-      const weekNum = getWeekNumber(year, currentMonth, d);
-      
-      const cell = document.createElement('div');
-      cell.className = 'day-cell';
-      if (dateStr === selectedDateStr) {
-        cell.classList.add('selected');
-      }
-
-      // スタンプの有無チェック
-      const tasks = getTasksForDate(dateStr);
-      const isAllDone = tasks.length > 0 && tasks.every(t => t.completed);
-
-      cell.innerHTML = `
-        <span class="day-num">${d}</span>
-        <span class="week-badge">W${weekNum}</span>
-        ${isAllDone ? '<span class="stamp-badge">済</span>' : '<span></span>'}
-      `;
-
-      cell.onclick = () => selectDate(dateStr);
-      grid.appendChild(cell);
-    }
+  return out;
+}
+function isDone(ds) { const t = customTasks[ds]; return !!(t && t.length > 0 && t.every(x => x.completed)); }
+function weekPct(w) {
+  let done = 0, total = 0;
+  weekDates(w).forEach(ds => {
+    const t = customTasks[ds] || programData[w];
+    total += t.length; done += t.filter(x => x.completed).length;
+  });
+  return total ? Math.round(done / total * 100) : 0;
+}
+function renderStats() {
+  const all = []; for (let w = 1; w <= 14; w++) all.push(...weekDates(w));
+  const t = todayStr(), ref = t > '2026-12-31' ? '2026-12-31' : t;
+  let best = 0, run = 0, last = -1;
+  all.forEach((ds, i) => { if (ds <= ref) { last = i; run = isDone(ds) ? run + 1 : 0; best = Math.max(best, run); } });
+  let cur = 0, i = last;
+  if (i >= 0 && !isDone(all[i])) i--;
+  while (i >= 0 && isDone(all[i])) { cur++; i--; }
+  const cw = curWeek(), wd = weekDates(cw);
+  let strip = '';
+  for (let w = 1; w <= 14; w++) {
+    const p = weekPct(w);
+    strip += `<div class="sb ${w === cw ? 'cur' : ''}" onclick="goDate('${weekDates(w)[0]}')"><div class="sbf"><i style="height:${p}%"></i></div><span>${w}</span></div>`;
   }
+  $('stats').innerHTML = `<div class="st-row">
+    <div class="st"><b>🔥 ${cur}日</b><span>連続達成</span></div>
+    <div class="st"><b>${best}日</b><span>最長記録</span></div>
+    <div class="st"><b>${wd.filter(isDone).length}/${wd.length}日</b><span>Week ${cw} 完了</span></div></div>
+    <div class="cap">週ごとの達成率（タップでその週へ）　※連続＝全タスク完了の日</div>
+    <div class="strip">${strip}</div>`;
+}
+function goDate(ds) { switchMonth(Number(ds.split('-')[1])); selectDate(ds); }
 
-  // 日付の選択
-  function selectDate(dateStr) {
-    selectedDateStr = dateStr;
-    renderCalendar();
-    renderTasks();
-  }
+function deleteWeek() {
+  const id = editingId; if (!id) return;
+  weekDates(curWeek()).forEach(ds => { customTasks[ds] = getTasks(ds).filter(t => t.id !== id); });
+  saveData(); closeTask(); renderTasks(); renderCalendar();
+}
 
-  // 指定日のタスクデータ取得
-  function getTasksForDate(dateStr) {
-    if (customTasks[dateStr]) {
-      return customTasks[dateStr];
-    }
-    // デフォルトデータのコピー
-    const parts = dateStr.split('-');
-    const w = getWeekNumber(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
-    const defaults = programData[w] || programData[1];
-    
-    // ディープコピー
-    customTasks[dateStr] = defaults.map(t => ({ ...t, completed: false }));
-    return customTasks[dateStr];
-  }
+function toggleTask(id) {
+  const t = getTasks(selected).find(x => x.id === id);
+  if (t) { t.completed = !t.completed; saveData(); renderTasks(); renderCalendar(); }
+}
+function deleteTask(id) {
+  customTasks[selected] = getTasks(selected).filter(t => t.id !== id);
+  saveData(); renderTasks(); renderCalendar();
+}
 
-  // タスクリスト描画
-  function renderTasks() {
-    const parts = selectedDateStr.split('-');
-    const y = parseInt(parts[0]);
-    const m = parseInt(parts[1]);
-    const d = parseInt(parts[2]);
-    const weekNum = getWeekNumber(y, m, d);
+function openTask(id) {
+  editingId = id;
+  const t = id ? getTasks(selected).find(x => x.id === id) : {};
+  $('taskModalTitle').textContent = id ? 'タスクの編集' : '新しいタスクの追加';
+  $('mTitle').value = t.title || '';
+  $('mTrigger').value = t.trigger || '';
+  $('mEffect').value = t.effect || '';
+  $('mWhy').value = t.why ?? whyDefaults[t.id] ?? '';
+  $('mGuide').value = t.guide || '';
+  $('mApplyLabel').textContent = `Week ${curWeek()} の全日（${weekDates(curWeek()).length}日間）に反映する`;
+  $('mApplyWeek').checked = true;
+  $('mDelWeek').classList.toggle('hidden', !id);
+  $('taskModal').classList.remove('hidden');
+}
+function closeTask() { $('taskModal').classList.add('hidden'); }
+function saveTask() {
+  const title = $('mTitle').value.trim(); if (!title) return;
+  const data = { title, trigger: $('mTrigger').value.trim(), effect: $('mEffect').value.trim(), why: $('mWhy').value.trim(), guide: $('mGuide').value.trim() };
+  const dates = $('mApplyWeek').checked ? weekDates(curWeek()) : [selected];
+  const newId = 'custom_' + Date.now();
+  dates.forEach(ds => {
+    const tasks = getTasks(ds);
+    if (editingId) { const t = tasks.find(x => x.id === editingId); if (t) Object.assign(t, data); }
+    else tasks.push({ id: newId, ...data, completed: false });
+  });
+  saveData(); closeTask(); renderTasks(); renderCalendar();
+}
 
-    // 曜日取得
-    const daysArr = ['日', '月', '火', '水', '木', '金', '土'];
-    const dayOfWeek = daysArr[new Date(y, m - 1, d).getDay()];
-
-    document.getElementById('selectedDateTitle').innerText = `${y}年${m}月${d}日 (${dayOfWeek})`;
-    document.getElementById('selectedWeekTag').innerText = `Week ${weekNum}`;
-
-    const tasks = getTasksForDate(selectedDateStr);
-    const completedCount = tasks.filter(t => t.completed).length;
-    const percent = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
-
-    document.getElementById('progressPercent').innerText = `${percent}%`;
-    document.getElementById('progressBarFill').style.width = `${percent}%`;
-
-    const container = document.getElementById('taskList');
-    container.innerHTML = '';
-
-    tasks.forEach((task, index) => {
-      const card = document.createElement('div');
-      card.className = 'task-card';
-
-      card.innerHTML = `
-        <div class="task-header">
-          <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
-          <div class="task-title-area">
-            <div class="task-title">${task.title}</div>
-          </div>
-          <div class="task-actions">
-            <button class="btn-action" onclick="openTaskModal('${task.id}')">編集</button>
-            <button class="btn-action" onclick="deleteTask('${task.id}')">削除</button>
-          </div>
-        </div>
-        
-        <div class="task-details-list">
-          <div class="info-row">
-            <span class="info-label">きっかけ:</span>
-            <span class="info-val">${task.trigger || '未設定'}</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">部位/効果:</span>
-            <span class="info-val">${task.effect || '未設定'}</span>
-          </div>
-        </div>
-
-        ${task.guide ? `
-        <details class="task-accordion">
-          <summary>▼ やり方・コツを見る</summary>
-          <div class="accordion-content">${task.guide}</div>
-        </details>
-        ` : ''}
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  // タスク完了トグル
-  function toggleTask(taskId) {
-    const tasks = getTasksForDate(selectedDateStr);
-    const target = tasks.find(t => t.id === taskId);
-    if (target) {
-      target.completed = !target.completed;
-      saveData();
-      renderTasks();
-      renderCalendar();
-    }
-  }
-
-  // タスク削除
-  function deleteTask(taskId) {
-    let tasks = getTasksForDate(selectedDateStr);
-    customTasks[selectedDateStr] = tasks.filter(t => t.id !== taskId);
-    saveData();
-    renderTasks();
-    renderCalendar();
-  }
-
-  // モーダル操作：タスク
-  function openTaskModal(taskId) {
-    editingTaskId = taskId;
-    const tasks = getTasksForDate(selectedDateStr);
-
-    if (taskId) {
-      const t = tasks.find(item => item.id === taskId);
-      document.getElementById('taskModalTitle').innerText = "タスクの編集";
-      document.getElementById('modalTaskTitle').value = t.title || '';
-      document.getElementById('modalTaskTrigger').value = t.trigger || '';
-      document.getElementById('modalTaskEffect').value = t.effect || '';
-      document.getElementById('modalTaskGuide').value = t.guide || '';
-    } else {
-      document.getElementById('taskModalTitle').innerText = "新しいタスクの追加";
-      document.getElementById('modalTaskTitle').value = '';
-      document.getElementById('modalTaskTrigger').value = '';
-      document.getElementById('modalTaskEffect').value = '';
-      document.getElementById('modalTaskGuide').value = '';
-    }
-    document.getElementById('taskModal').classList.remove('hidden');
-  }
-
-  function closeTaskModal() {
-    document.getElementById('taskModal').classList.add('hidden');
-  }
-
-  function saveTaskModal() {
-    const title = document.getElementById('modalTaskTitle').value.trim();
-    if (!title) return;
-
-    const trigger = document.getElementById('modalTaskTrigger').value.trim();
-    const effect = document.getElementById('modalTaskEffect').value.trim();
-    const guide = document.getElementById('modalTaskGuide').value.trim();
-
-    let tasks = getTasksForDate(selectedDateStr);
-
-    if (editingTaskId) {
-      const t = tasks.find(item => item.id === editingTaskId);
-      if (t) {
-        t.title = title;
-        t.trigger = trigger;
-        t.effect = effect;
-        t.guide = guide;
-      }
-    } else {
-      tasks.push({
-        id: 'custom_' + Date.now(),
-        title: title,
-        trigger: trigger,
-        effect: effect,
-        guide: guide,
-        completed: false
-      });
-    }
-
-    saveData();
-    closeTaskModal();
-    renderTasks();
-    renderCalendar();
-  }
-
-  // モーダル操作：目標
-  function openTargetModal() {
-    document.getElementById('targetInput').value = targetGoal;
-    document.getElementById('targetModal').classList.remove('hidden');
-  }
-
-  function closeTargetModal() {
-    document.getElementById('targetModal').classList.add('hidden');
-  }
-
-  function saveTarget() {
-    const val = document.getElementById('targetInput').value.trim();
-    if (val) {
-      targetGoal = val;
-      document.getElementById('targetText').innerText = targetGoal;
-      saveData();
-    }
-    closeTargetModal();
-  }
+function openText(kind) {
+  textKind = kind;
+  const isReason = kind === 'reason';
+  $('textTitle').textContent = isReason ? '私がこれをやる理由' : '目標の編集';
+  $('textHint').textContent = isReason ? 'やる気が出ない日の自分に向けて、自分の言葉で。数値より「どうなりたいか」が効きます。' : '';
+  $('textHint').classList.toggle('hidden', !isReason);
+  $('textInput').value = isReason ? myReason : targetGoal;
+  $('textModal').classList.remove('hidden');
+}
+function closeText() { $('textModal').classList.add('hidden'); }
+function saveText() {
+  const v = $('textInput').value.trim();
+  if (textKind === 'reason') myReason = v;
+  else if (v) targetGoal = v;
+  saveData(); renderHeader(); closeText();
+}
 </script>
-
 </body>
 </html>
