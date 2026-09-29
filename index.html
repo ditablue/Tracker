@@ -11,7 +11,6 @@
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
-
   body {
     background-color: #0f0f11;
     color: #f3f4f6;
@@ -19,7 +18,6 @@
     display: flex;
     justify-content: center;
   }
-
   .app-container {
     width: 100%;
     max-width: 420px;
@@ -27,857 +25,342 @@
     flex-direction: column;
     gap: 12px;
   }
-
-  /* 共通カードスタイル */
   .card {
     background-color: #18181b;
     border: 1px solid #27272a;
     border-radius: 12px;
     padding: 14px;
   }
-
-  /* ヘッダー＆目標 */
   .header-card {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .header-top {
-    display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
   }
-
-  .app-title {
-    font-size: 18px;
+  .header-title {
+    font-size: 1.1rem;
     font-weight: bold;
     color: #ffffff;
   }
-
-  .app-subtitle {
-    font-size: 11px;
-    color: #a1a1aa;
-    margin-top: 2px;
-  }
-
-  .btn-target-edit {
+  .progress-badge {
     background-color: #27272a;
-    color: #d4d4d8;
-    border: 1px solid #3f3f46;
-    padding: 5px 10px;
+    color: #22c55e;
+    padding: 4px 10px;
     border-radius: 16px;
-    font-size: 11px;
-    cursor: pointer;
-  }
-
-  .target-box {
-    background-color: #202024;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 13px;
-    color: #e4e4e7;
-    line-height: 1.4;
-  }
-
-  .target-label {
-    font-weight: bold;
-    color: #a1a1aa;
-    margin-right: 6px;
-  }
-
-  /* 月選択タブ */
-  .month-tabs {
-    display: flex;
-    background-color: #202024;
-    border-radius: 10px;
-    padding: 3px;
-    gap: 4px;
-  }
-
-  .month-tab {
-    flex: 1;
-    text-align: center;
-    padding: 7px 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: #a1a1aa;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .month-tab.active {
-    background-color: #27272a;
-    color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-
-  /* カレンダー */
-  .calendar-card {
-    padding: 12px 8px;
-  }
-
-  .week-days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    font-size: 11px;
-    color: #71717a;
-    margin-bottom: 6px;
+    font-size: 0.85rem;
     font-weight: 600;
   }
-
-  .days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-  }
-
-  .day-cell {
-    aspect-ratio: 0.85;
-    background-color: #202024;
-    border-radius: 6px;
-    padding: 2px;
+  .week-selector-card {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.15s;
-    min-width: 0;
-  }
-
-  .day-cell.other-month {
-    opacity: 0.25;
-  }
-
-  .day-cell.selected {
-    background-color: #1e3a8a;
-    border-color: #3b82f6;
-  }
-
-  .day-num {
-    font-size: 11px;
-    font-weight: 600;
-    color: #e4e4e7;
-    line-height: 1;
-    margin-top: 2px;
-  }
-
-  .week-badge {
-    font-size: 8px;
-    background-color: #27272a;
-    color: #a1a1aa;
-    padding: 1px 3px;
-    border-radius: 3px;
-    line-height: 1;
-  }
-
-  .day-cell.selected .week-badge {
-    background-color: #2563eb;
-    color: #ffffff;
-  }
-
-  .stamp-badge {
-    font-size: 9px;
-    font-weight: bold;
-    color: #4ade80;
-    line-height: 1;
-    margin-bottom: 2px;
-  }
-
-  /* 選択日＆進捗表示 */
-  .selected-date-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .date-title-group {
-    display: flex;
-    align-items: center;
     gap: 8px;
   }
-
-  .date-text {
-    font-size: 14px;
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  .week-tag {
+  .select-style {
     background-color: #27272a;
-    color: #4ade80;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-weight: 600;
-  }
-
-  .progress-percent {
-    font-size: 11px;
-    color: #a1a1aa;
-    font-weight: 600;
-  }
-
-  .progress-bar-bg {
+    color: #f3f4f6;
+    border: 1px solid #3f3f46;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
     width: 100%;
-    height: 4px;
-    background-color: #27272a;
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 12px;
+    outline: none;
   }
-
-  .progress-bar-fill {
-    height: 100%;
-    background-color: #22c55e;
-    width: 0%;
-    transition: width 0.3s ease;
-  }
-
-  /* タスクエリア */
-  .task-list-container {
-    background-color: #141417;
-    border: 1px solid #166534;
-    border-radius: 12px;
-    padding: 12px;
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #a1a1aa;
+    margin-bottom: 8px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
   }
-
   .task-card {
     background-color: #18181b;
-    border: 1px solid #22c55e;
-    border-radius: 8px;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .task-header {
     padding: 12px;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .task-header {
-    display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
   }
-
   .task-checkbox {
     width: 22px;
     height: 22px;
-    border: 2px solid #22c55e;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
     margin-top: 2px;
-    background-color: transparent;
+    accent-color: #22c55e;
+    cursor: pointer;
   }
-
-  .task-checkbox.checked {
-    background-color: #22c55e;
-  }
-
-  .task-checkbox.checked::after {
-    content: "✓";
-    color: #000000;
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  .task-title-area {
+  .task-info {
     flex: 1;
   }
-
-  .task-title {
-    font-size: 13px;
-    font-weight: bold;
-    color: #ffffff;
+  .task-title-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #f3f4f6;
+    margin-bottom: 6px;
     line-height: 1.3;
   }
-
-  .task-actions {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
+  .task-meta-line {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 2px;
   }
-
-  .btn-action {
+  .meta-trigger {
+    color: #38bdf8;
+  }
+  .meta-effect {
+    color: #4ade80;
+  }
+  .guide-toggle {
     background: none;
     border: none;
     color: #71717a;
-    font-size: 11px;
+    font-size: 0.8rem;
     cursor: pointer;
-    padding: 2px;
-  }
-
-  .btn-action:hover {
-    color: #d4d4d8;
-  }
-
-  /* 修正ポイント：1行ずつハッキリ見せる構造 */
-  .task-details-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: 2px;
-    padding-left: 32px;
-  }
-
-  .info-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 6px;
-    font-size: 11px;
-    line-height: 1.4;
-  }
-
-  .info-label {
-    color: #4ade80;
-    font-weight: 600;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .info-val {
-    color: #d4d4d8;
-    word-break: break-word;
-  }
-
-  /* アコーディオン (やり方・コツ) */
-  details.task-accordion {
-    padding-left: 32px;
-    margin-top: 2px;
-  }
-
-  details.task-accordion summary {
-    font-size: 11px;
-    color: #60a5fa;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-  }
-
-  details.task-accordion summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .accordion-content {
-    margin-top: 6px;
-    background-color: #202024;
-    border-radius: 6px;
-    padding: 8px;
-    font-size: 11px;
-    color: #a1a1aa;
-    line-height: 1.4;
-  }
-
-  /* タスク追加ボタン */
-  .btn-add-task {
-    background: transparent;
-    border: 1px dashed #27272a;
-    color: #a1a1aa;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
+    padding: 8px 12px;
     width: 100%;
-    transition: all 0.2s;
-  }
-
-  .btn-add-task:hover {
-    border-color: #22c55e;
-    color: #22c55e;
-  }
-
-  /* モーダル */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.75);
+    text-align: left;
+    border-top: 1px solid #27272a;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 16px;
   }
-
-  .modal-card {
-    background-color: #18181b;
-    border: 1px solid #3f3f46;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 380px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .modal-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  .modal-field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .modal-label {
-    font-size: 11px;
-    color: #a1a1aa;
-  }
-
-  .modal-input, .modal-textarea {
-    background-color: #202024;
-    border: 1px solid #27272a;
-    border-radius: 6px;
-    color: #ffffff;
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .modal-textarea {
-    resize: vertical;
-    min-height: 50px;
-  }
-
-  .modal-btns {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 4px;
-  }
-
-  .btn-modal {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-  }
-
-  .btn-modal-cancel {
-    background-color: #27272a;
+  .guide-content {
+    display: none;
+    padding: 12px;
+    background-color: #0f0f11;
+    border-top: 1px solid #27272a;
+    font-size: 0.82rem;
     color: #d4d4d8;
+    white-space: pre-wrap;
+    line-height: 1.5;
   }
-
-  .btn-modal-save {
-    background-color: #22c55e;
-    color: #000000;
-    font-weight: bold;
+  .guide-content.open {
+    display: block;
   }
-
-  .hidden {
-    display: none !important;
+  .custom-task-input {
+    width: 100%;
+    background-color: #27272a;
+    border: 1px solid #3f3f46;
+    border-radius: 6px;
+    padding: 8px;
+    color: #f3f4f6;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
   }
 </style>
 </head>
 <body>
 
 <div class="app-container">
-
-  <!-- ヘッダー＆目標カード -->
+  <!-- ヘッダー -->
   <div class="card header-card">
-    <div class="header-top">
-      <div>
-        <div class="app-title">習慣化トラッカー</div>
-        <div class="app-subtitle">行動科学に基づく14週間プログラム (2026年10月〜12月)</div>
-      </div>
-      <button class="btn-target-edit" onclick="openTargetModal()">目標編集</button>
-    </div>
-    <div class="target-box">
-      <span class="target-label">現在の目標:</span><span id="targetText">12月末までにウエスト-3cm & 胸元引き締め</span>
-    </div>
+    <div class="header-title">習慣化ボディトラッカー</div>
+    <div class="progress-badge" id="progressBadge">進捗: 0%</div>
   </div>
 
-  <!-- 月切替タブ -->
-  <div class="month-tabs">
-    <div class="month-tab active" onclick="switchMonth(10)">10月</div>
-    <div class="month-tab" onclick="switchMonth(11)">11月</div>
-    <div class="month-tab" onclick="switchMonth(12)">12月</div>
+  <!-- 週選択 -->
+  <div class="card week-selector-card">
+    <select id="weekSelect" class="select-style" onchange="renderTasks()">
+      <!-- JSで14週分生成 -->
+    </select>
   </div>
 
-  <!-- 上部月次カレンダー -->
-  <div class="card calendar-card">
-    <div class="week-days-grid">
-      <div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>
+  <!-- タスク一覧エリア -->
+  <div>
+    <div class="section-title">
+      <span>今週の習慣タスク (3/3)</span>
     </div>
-    <div class="days-grid" id="calendarDaysGrid"></div>
-  </div>
-
-  <!-- 日次タスクエリア -->
-  <div class="task-list-container">
-    <div class="selected-date-bar">
-      <div class="date-title-group">
-        <span class="date-text" id="selectedDateTitle">2026年10月1日 (木)</span>
-        <span class="week-tag" id="selectedWeekTag">Week 1</span>
-      </div>
-      <span class="progress-percent" id="progressPercent">0%</span>
-    </div>
-
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressBarFill"></div>
-    </div>
-
     <div id="taskList"></div>
-
-    <button class="btn-add-task" onclick="openTaskModal(null)">＋ 新しいタスクを追加</button>
-  </div>
-
-</div>
-
-<!-- 目標編集モーダル -->
-<div class="modal-overlay hidden" id="targetModal">
-  <div class="modal-card">
-    <div class="modal-title">目標の編集</div>
-    <div class="modal-field">
-      <label class="modal-label">目標内容</label>
-      <input type="text" class="modal-input" id="targetInput" value="">
-    </div>
-    <div class="modal-btns">
-      <button class="btn-modal btn-modal-cancel" onclick="closeTargetModal()">キャンセル</button>
-      <button class="btn-modal btn-modal-save" onclick="saveTarget()">保存</button>
-    </div>
-  </div>
-</div>
-
-<!-- タスク編集・追加モーダル -->
-<div class="modal-overlay hidden" id="taskModal">
-  <div class="modal-card">
-    <div class="modal-title" id="taskModalTitle">タスクの編集</div>
-    <div class="modal-field">
-      <label class="modal-label">タスク名</label>
-      <input type="text" class="modal-input" id="modalTaskTitle">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">きっかけ（トリガー）</label>
-      <input type="text" class="modal-input" id="modalTaskTrigger">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">部位 / 効果</label>
-      <input type="text" class="modal-input" id="modalTaskEffect">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">やり方・コツ</label>
-      <textarea class="modal-textarea" id="modalTaskGuide"></textarea>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-modal btn-modal-cancel" onclick="closeTaskModal()">キャンセル</button>
-      <button class="btn-modal btn-modal-save" onclick="saveTaskModal()">保存</button>
-    </div>
   </div>
 </div>
 
 <script>
-  // 週別プログラムデータ（Week 1〜14）
-  const programData = {
-    1: [
-      { id: 'w1_1', title: '朝起きてすぐのドローイン (30秒×2)', trigger: 'ベッドから出た直後', effect: '腹横筋（ぽっこりお腹解消）', guide: '仰向けまたは立ち姿勢で、息を吐き切りながらお腹を背中に近づけるように深く凹ませてキープ。' },
-      { id: 'w1_2', title: 'デスク胸開きストレッチ (30秒)', trigger: 'PC作業を開始する直前', effect: '大胸筋ストレッチ（猫背改善）', guide: '背中側で両手を組み、胸を大きく張りながら息を吐く。肩甲骨を引き寄せる意識で行う。' },
-      { id: 'w1_3', title: '歯磨き時のつま先立ち腹圧キープ', trigger: '朝夕の歯磨き中', effect: '体幹＆姿勢維持', guide: '歯を磨きながらかかとを浮かせ、下腹部に適度な力を入れてまっすぐ立つ。' }
-    ],
-    2: [
-      { id: 'w2_1', title: '壁押しアイソメトリックス (10秒×3)', trigger: 'キッチンで湯沸かし中', effect: '大胸筋上部（胸元引き締め）', guide: '壁に向かって立ち、両手を胸の高さについて全力で壁を押し込む。胸に意識を集中。' },
-      { id: 'w2_2', title: '椅子座りレッグレイズ (10回)', trigger: '着席して作業に入る直前', effect: '腹直筋下部（下腹撃退）', guide: '浅く腰掛け、両脚を揃えて浮かせ、お腹の力で引き上げる。' },
-      { id: 'w2_3', title: '階段利用時のドローイン歩行', trigger: '階段を登る時', effect: '体幹コア＆代謝UP', guide: 'お腹を軽く凹ませた状態をキープしながら一歩一歩登る。' }
-    ],
-    3: [
-      { id: 'w3_1', title: 'ドアノブプッシュアップ (10回)', trigger: '部屋のドアを開けるとき', effect: '大胸筋（バストアップ＆姿勢改善）', guide: 'ドア枠や壁を使って斜め腕立て伏せ。胸を壁に近づける時に息を吸う。' },
-      { id: 'w3_2', title: '立ち姿勢シーテッドクランチ (12回)', trigger: 'トイレで手を洗った直後', effect: '腹直筋上部（お腹上部）', guide: '立って両手を頭の後ろに置き、お腹を丸めるように肋骨と骨盤を近づける。' },
-      { id: 'w3_3', title: '食後の胸張りウォーキング (1分)', trigger: '昼食を終えた直後', effect: '胸郭拡大＆姿勢リセット', guide: '胸を軽く張り、肩甲骨を下げて1分間部屋の中を歩く。' }
-    ],
-    4: [
-      { id: 'w4_1', title: '壁腕立て伏せ (12回)', trigger: 'トイレから出た直後', effect: '大胸筋全体', guide: '壁から一歩離れ、手幅を肩幅より広くしてゆっくり肘を曲げて押す。' },
-      { id: 'w4_2', title: 'ドローインキープ (45秒)', trigger: '帰宅してソファに座る直前', effect: 'インナーマッスル強化', guide: 'お腹をしっかり引っ込めたまま、浅い胸式呼吸を繰り返す。' },
-      { id: 'w4_3', title: '肩甲骨はがし回旋 (15回)', trigger: '入浴前', effect: '胸背部血流促進', guide: '両手先を肩に置き、肘で大きな円を描くように前後に回す。' }
-    ]
-  };
+// 14週間プログラムデータ
+const roadmapData = {
+  1: [
+    { title: "PC作業開始直前の胸筋ストレッチ", trigger: "PC作業を開始する直前", effect: "大胸筋ストレッチ (猫背改善)", guide: "【やり方】\n1. 壁の横に立ち、肘を90度に曲げて前腕を壁につける。\n2. 体を少し前に倒し、胸の筋肉（大胸筋）が伸びるのを感じる。\n3. 左右各15秒伸ばす。\n\n【ポイント】\n息を止めずに深呼吸しながら行いましょう。" },
+    { title: "歯磨き時のつま先立ち腹圧キープ", trigger: "朝夕の歯磨き中", effect: "体幹 & 姿勢維持", guide: "【やり方】\n1. 歯磨き中に、両足のかかとを軽く浮かせる。\n2. お腹を背中に引きつけるように凹ませ（腹圧）、姿勢をピンと保つ。\n\n【ポイント】\nグラグラする場合は壁に片手を添えてOKです。" },
+    { title: "夕食後の白湯1杯摂取", trigger: "夕食を終えた直後", effect: "代謝促進 & 消化サポート", guide: "【やり方】\n1. コップ1杯（200ml程度）のぬるめのお湯（白湯）を用意する。\n2. 5分ほどかけてゆっくり飲む。\n\n【ポイント】\n内臓を温めることで基礎代謝を上げ、夜の不必要な間食を防ぎます。" }
+  ],
+  2: [
+    { title: "着替え時の肩甲骨寄せるストレッチ", trigger: "朝の着替え・服を選ぶ時", effect: "肩甲骨はがし (背中引き締め)", guide: "【やり方】\n1. 両手を後ろで組み、胸を張る。\n2. 肩甲骨同士をギュッと引き寄せて5秒キープ。\n3. これを3回繰り返す。" },
+    { title: "トイレ後のスクワット5回", trigger: "トイレから出る時", effect: "下半身筋肉（大腿四頭筋・大臀筋）の刺激", guide: "【やり方】\n1. 足を肩幅に開き、股関節から折り曲げるように腰を落とす。\n2. 膝がつま先より前に出ないように注意し、ゆっくり5回行う。" },
+    { title: "就寝前の深呼吸（4-7-8呼吸法）", trigger: "布団に入った直後", effect: "自律神経調整・睡眠質向上", guide: "【やり方】\n1. 4秒かけて鼻から息を吸う。\n2. 7秒間息を止める。\n3. 8秒かけて口から細く長く吐き出す。\n4. これを3セット行う。" }
+  ],
+  3: [
+    { title: "デスク着席時の骨盤リセット", trigger: "椅子に座った直後", effect: "骨盤起こし・下腹部凹ませ", guide: "【やり方】\n1. 坐骨（お尻の骨）で座面を押すイメージで骨盤を立てる。\n2. 下腹部に軽く力を入れ、背すじを伸ばす。" },
+    { title: "昼食直後の1分間ウォーキング", trigger: "昼食を食べ終えた時", effect: "食後血糖値スパイクの抑制", guide: "【やり方】\n1. 食べた後すぐに座らず、室内やオフィス内を1分間歩き回る。\n2. 時間があれば階段の昇り降りも効果的。" },
+    { title: "スマホ閲覧時の首ストレッチ", trigger: "夜スマホを開いた時", effect: "ストレートネック予防・首細見え", guide: "【やり方】\n1. 頭の上に手を置き、ゆっくり横に倒して首の横を伸ばす（左右10秒）。\n2. スマホを目線の高さまで上げて見る意識を持つ。" }
+  ],
+  4: [
+    { title: "ドライヤー中の片足立ちバランス", trigger: "髪を乾かしている時", effect: "体幹強化・むくみ解消", guide: "【やり方】\n1. 髪を乾かしながら、片足を床から数センチ浮かせる。\n2. 左右各30秒ずつキープする。" },
+    { title: "コーヒー・お茶を淹れる間の踵上げ下ろし", trigger: "お湯を沸かす・淹れる待ち時間", effect: "ふくらはぎのポンプ機能活性", guide: "【やり方】\n1. かかとを真上に引き上げ、1秒キープして下ろす。\n2. 10回繰り返す（第二の心臓を刺激して代謝UP）。" },
+    { title: "入浴前の体重測定＆記録", trigger: "お風呂に入る直前", effect: "レコーディング効果・意識向上", guide: "【やり方】\n1. 毎日決まったタイミング（脱衣時）で体重計に乗る。\n2. 数字を一喜一憂せずに記録する。" }
+  ],
+  5: [
+    { title: "朝起きた直後のコップ1杯の水", trigger: "ベッドから起きた直後", effect: "腸の蠕動運動活性・腸内環境ケア", guide: "【やり方】\n1. 起き抜けに常温の水または白湯を1杯飲む。\n2. 胃腸を目覚めさせて朝の排泄を促す。" },
+    { title: "階段利用時のつま先押し出し歩行", trigger: "階段を上る時", effect: "ヒップアップ・裏もも（ハムストリングス）刺激", guide: "【やり方】\n1. 階段を上る際、足裏全体で踏み込み、後ろ足のつま先で最後までしっかり地面を押す。" },
+    { title: "入浴後のもも裏・股関節ストレッチ", trigger: "お風呂上がり", effect: "柔軟性UP・代謝促進", guide: "【やり方】\n1. 床に座り、両足を広げて体を前傾させる（股関節）。\n2. 片足を伸ばしてもも裏を伸ばす（左右15秒）。" }
+  ],
+  6: [
+    { title: "エレベーター待ち時間の腹圧入れ", trigger: "エレベーターや信号を待つ時", effect: "ドローイン（腹横筋強化）", guide: "【やり方】\n1. 息を吐きながらお腹を極限まで凹ませ、そのまま10秒浅く息をしながらキープ。" },
+    { title: "仕事中の1時間ごとの立ち上がり", trigger: "タイマーや時間の区切り", effect: "座りっぱなし防止・血流改善", guide: "【やり方】\n1. 1時間に1回、立ち上がって軽く体を揺らすか、10歩歩く。" },
+    { title: "夕食時の野菜ファースト一口目", trigger: "夕食の一口目を食べる時", effect: "血糖値上昇のゆるやか化", guide: "【やり方】\n1. サラダや汁物の具材（野菜・海藻・キノコ）から先に食べる。" }
+  ],
+  7: [
+    { title: "朝の光を浴びながらの背伸び", trigger: "カーテンを開けた時", effect: "体内時計リセット・セロトニン分泌", guide: "【やり方】\n1. 光を浴びながら両手を高く上げて全力で背伸びをする（5秒）。" },
+    { title: "買い物バッグを持つ際のお腹引き締め", trigger: "買い物袋を持ち上げた時", effect: "体幹＆腕の引き締め", guide: "【やり方】\n1. 荷物を持つ時に肩を下げ、お腹に軽く力を入れて歩く。" },
+    { title: "夜のストレッチ時のドローイン呼吸", trigger: "夜のケアタイム", effect: "インナーマッスル強化", guide: "【やり方】\n1. 仰向けになり、お腹を凹ませながら息をゆっくり吐ききる（5回）。" }
+  ],
+  8: [
+    { title: "デスクワーク中の膝閉じキープ", trigger: "PC作業中（思い出した時）", effect: "内もも（内転筋）引き締め", guide: "【やり方】\n1. 両膝と両くるぶしをぴったりくっつけて座る（30秒キープ）。" },
+    { title: "歯磨き後の舌回し運動", trigger: "歯磨きが終わった直後", effect: "フェイスライン引き締め・二重あご予防", guide: "【やり方】\n1. 口を閉じたまま、歯の表面をなぞるように舌を大きく回す（左右10回）。" },
+    { title: "夕方の一杯の温かいハーブティー/白湯", trigger: "16時〜17時の休憩時", effect: "間食防止・ドカ食い抑制", guide: "【やり方】\n1. 温かいノンカフェインの飲み物を飲んでお腹を満たし気持ちを落ち着かせる。" }
+  ],
+  9: [
+    { title: "靴を履く直前のふくらはぎ伸ばし", trigger: "靴を履く直前", effect: "アキレス腱・ふくらはぎ柔軟化", guide: "【やり方】\n1. 片足を後ろに引いてかかとを床につけ、前足を曲げて伸ばす（左右10秒）。" },
+    { title: "座る直前のスロースワット1回", trigger: "椅子に座る瞬間", effect: "大腿四頭筋刺激", guide: "【やり方】\n1. 椅子に座る寸前で3秒キープしてから静かに着席する。" },
+    { title: "入浴中の足首まわし", trigger: "湯船に浸かった時", effect: "足首の冷え・むくみ解消", guide: "【やり方】\n1. 手で足の指を握り、足首を大きくグルグル回す（左右10回）。" }
+  ],
+  10: [
+    { title: "起床後のキャット＆カウポーズ", trigger: "ベッドから出る直前", effect: "脊柱の柔軟性向上", guide: "【やり方】\n1. 四つんバイになり、背中を丸める（息を吐く）→背中を反らせる（息を吸う）を3回。" },
+    { title: "歩行時の大股意識", trigger: "外を歩き始めた時", effect: "運動量増加・臀筋刺激", guide: "【やり方】\n1. 普段より拳1個分歩幅を広げて前進する。" },
+    { title: "夕食後の食器洗い中の踵上げ", trigger: "皿洗いをしている時", effect: "立位での代謝UP", guide: "【やり方】\n1. 皿洗いをしながらかかとの上げ下ろしを15回行う。" }
+  ],
+  11: [
+    { title: "手洗い後の腕伸ばしストレッチ", trigger: "手を洗って拭いた後", effect: "二の腕（上腕三頭筋）伸ばし", guide: "【やり方】\n1. 片肘を頭の後ろに引き、反対の手で押さえて伸ばす（左右10秒）。" },
+    { title: "立ち上がり時のノー手つき", trigger: "椅子や床から立ち上がる時", effect: "下半身の筋力活用", guide: "【やり方】\n1. 手を使わずに足と体幹の力だけでスッと立ち上がる。" },
+    { title: "布団の中での足首パタパタ", trigger: "寝る直前", effect: "末端の血流改善・入眠スムーズ化", guide: "【やり方】\n1. 足の甲を伸ばす・起こすを交互に15回繰り返す。" }
+  ],
+  12: [
+    { title: "朝のブラッシング時の姿勢チェック", trigger: "髪をとかす・鏡を見た時", effect: "耳・肩・骨盤の直線ライン確認", guide: "【やり方】\n1. 鏡に対して横向きになり、姿勢が前傾していないか確認して正す。" },
+    { title: "階段の下りでの膝をやさしく使う意識", trigger: "階段を下りる時", effect: "クッション筋（大腿四頭筋）刺激", guide: "【やり方】\n1. ドスンと降りず、太ももの力で衝撃を吸収しながら静かに降りる。" },
+    { title: "お風呂上がりのウエストひねり", trigger: "体を拭いた後", effect: "腹斜筋刺激・くびれライン", guide: "【やり方】\n1. 上半身を左右にゆっくりツイストする（左右10回）。" }
+  ],
+  13: [
+    { title: "PC作業中の肩ストップ＆リセット", trigger: "作業に区切りのついた時", effect: "巻き肩予防", guide: "【やり方】\n1. 肩を耳まで引き上げてから、ストンと後ろに落とす（3回）。" },
+    { title: "荷物を持つ手・肩の左右交互入れ替え", trigger: "バッグを移動させる時", effect: "身体の左右バランス整え", guide: "【やり方】\n1. 意識して普段と反対側の肩や手で荷物を持つ。" },
+    { title: "夜の湯船での深呼吸泡マッサージ", trigger: "湯船の中", effect: "リラックス＆リンパ流し", guide: "【やり方】\n1. ふくらはぎや太ももを下から上へ撫で上げる。" }
+  ],
+  14: [
+    { title: "朝のファーストステップでの着地意識", trigger: "朝一歩目を踏み出す時", effect: "足裏アーチの活性", guide: "【やり方】\n1. かかとから着地し、親指の付け根でしっかり蹴り出す意識を持つ。" },
+    { title: "日常動作での「お腹1cm引っ込め」", trigger: "歩いているすべての時間", effect: "天然のコルセット（腹横筋）定着", guide: "【やり方】\n1. 常にうっすらとお腹を引っ込めた状態をキープして過ごす。" },
+    { title: "1日の終わりの習慣達成セルフ承認", trigger: "ベッドに入って目を閉じる時", effect: "自己効力感UP・習慣定着", guide: "【やり方】\n1. 「今日も1日よく体をケアできた」と自分を褒めて眠りにつく。" }
+  ]
+};
 
-  // Week 5〜14用のデフォルト補完データ生成
-  for (let w = 5; w <= 14; w++) {
-    programData[w] = [
-      { id: `w${w}_1`, title: `膝つきプッシュアップ (${8 + w - 4}回)`, trigger: 'お風呂に入る前', effect: '大胸筋強化＆代謝UP', guide: '膝をついた状態で手幅を広めに取り、胸が床につくギリギリまで下ろす。' },
-      { id: `w${w}_2`, title: `ニーアップクランチ (${10 + w - 4}回)`, trigger: '夜着替える時', effect: '腹直筋・腹斜筋', guide: '仰向けで膝を立て、お腹をのぞき込むように上体を起こして収縮させる。' },
-      { id: `w${w}_3`, title: `ハイプランクキープ (${20 + (w-4)*5}秒)`, trigger: 'テレビのCM中', effect: '体幹全体＆胸部維持', guide: '腕立て伏せの姿勢で頭からかかとまで一直線を保つ。' }
-    ];
+// 初期化＆イベント設定
+document.addEventListener('DOMContentLoaded', () => {
+  initWeekSelect();
+  renderTasks();
+});
+
+// 週選択肢の生成
+function initWeekSelect() {
+  const weekSelect = document.getElementById('weekSelect');
+  weekSelect.innerHTML = '';
+  for (let i = 1; i <= 14; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `第 ${i} 週プログラム`;
+    weekSelect.appendChild(opt);
   }
+}
 
-  // アプリの状態
-  let currentMonth = 10;
-  let selectedDateStr = "2026-10-01"; // YYYY-MM-DD
-  let customTasks = {}; // 日付ごとのカスタム/完了タスクデータ { "2026-10-01": [ ... ] }
-  let targetGoal = "12月末までにウエスト-3cm & 胸元引き締め";
-  let editingTaskId = null;
+// タスクの描画＆ローカルストレージからの読み込み
+function renderTasks() {
+  const currentWeek = document.getElementById('weekSelect').value;
+  const taskList = document.getElementById('taskList');
+  taskList.innerHTML = '';
 
-  // 初期化
-  window.onload = function() {
-    renderCalendar();
-    selectDate("2026-10-01");
-  };
+  const tasks = roadmapData[currentWeek] || [];
 
-  function switchMonth(m) {
-    currentMonth = m;
-    document.querySelectorAll('.month-tab').forEach((tab, idx) => {
-      tab.classList.toggle('active', (m === 10 && idx === 0) || (m === 11 && idx === 1) || (m === 12 && idx === 2));
-    });
-    renderCalendar();
-  }
+  tasks.forEach((task, index) => {
+    const taskId = `w${currentWeek}_t${index}`;
+    // ローカルストレージから保存されたデータを読み込む
+    const isChecked = localStorage.getItem(`cb_${taskId}`) === 'true';
+    const savedCustomTitle = localStorage.getItem(`title_${taskId}`) || task.title;
+    const savedCustomTrigger = localStorage.getItem(`trigger_${taskId}`) || task.trigger;
+    const savedCustomEffect = localStorage.getItem(`effect_${taskId}`) || task.effect;
 
-  // 日付から該当するWeek(1〜14)を計算
-  function getWeekNumber(year, month, day) {
-    const start = new Date(2026, 9, 1); // 2026/10/01
-    const current = new Date(year, month - 1, day);
-    const diffTime = current - start;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays < 0) return 1;
-    const w = Math.floor(diffDays / 7) + 1;
-    return w > 14 ? 14 : w;
-  }
+    const taskCard = document.createElement('div');
+    taskCard.className = 'task-card';
 
-  // カレンダー描画
-  function renderCalendar() {
-    const grid = document.getElementById('calendarDaysGrid');
-    grid.innerHTML = '';
-
-    const year = 2026;
-    const firstDay = new Date(year, currentMonth - 1, 1).getDay(); // 曜日のオフセット
-    const daysInMonth = new Date(year, currentMonth, 0).getDate();
-
-    // 前月の空白埋め
-    const prevMonthDays = new Date(year, currentMonth - 1, 0).getDate();
-    for (let i = firstDay - 1; i >= 0; i--) {
-      const cell = document.createElement('div');
-      cell.className = 'day-cell other-month';
-      cell.innerHTML = `<span class="day-num">${prevMonthDays - i}</span>`;
-      grid.appendChild(cell);
-    }
-
-    // 今月の日付
-    for (let d = 1; d <= daysInMonth; d++) {
-      const dateStr = `${year}-${String(currentMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-      const weekNum = getWeekNumber(year, currentMonth, d);
-      
-      const cell = document.createElement('div');
-      cell.className = 'day-cell';
-      if (dateStr === selectedDateStr) {
-        cell.classList.add('selected');
-      }
-
-      // スタンプの有無チェック
-      const tasks = getTasksForDate(dateStr);
-      const isAllDone = tasks.length > 0 && tasks.every(t => t.completed);
-
-      cell.innerHTML = `
-        <span class="day-num">${d}</span>
-        <span class="week-badge">W${weekNum}</span>
-        ${isAllDone ? '<span class="stamp-badge">済</span>' : '<span></span>'}
-      `;
-
-      cell.onclick = () => selectDate(dateStr);
-      grid.appendChild(cell);
-    }
-  }
-
-  // 日付の選択
-  function selectDate(dateStr) {
-    selectedDateStr = dateStr;
-    renderCalendar();
-    renderTasks();
-  }
-
-  // 指定日のタスクデータ取得
-  function getTasksForDate(dateStr) {
-    if (customTasks[dateStr]) {
-      return customTasks[dateStr];
-    }
-    // デフォルトデータのコピー
-    const parts = dateStr.split('-');
-    const w = getWeekNumber(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
-    const defaults = programData[w] || programData[1];
-    
-    // ディープコピー
-    customTasks[dateStr] = defaults.map(t => ({ ...t, completed: false }));
-    return customTasks[dateStr];
-  }
-
-  // タスクリスト描画
-  function renderTasks() {
-    const parts = selectedDateStr.split('-');
-    const y = parseInt(parts[0]);
-    const m = parseInt(parts[1]);
-    const d = parseInt(parts[2]);
-    const weekNum = getWeekNumber(y, m, d);
-
-    // 曜日取得
-    const daysArr = ['日', '月', '火', '水', '木', '金', '土'];
-    const dayOfWeek = daysArr[new Date(y, m - 1, d).getDay()];
-
-    document.getElementById('selectedDateTitle').innerText = `${y}年${m}月${d}日 (${dayOfWeek})`;
-    document.getElementById('selectedWeekTag').innerText = `Week ${weekNum}`;
-
-    const tasks = getTasksForDate(selectedDateStr);
-    const completedCount = tasks.filter(t => t.completed).length;
-    const percent = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
-
-    document.getElementById('progressPercent').innerText = `${percent}%`;
-    document.getElementById('progressBarFill').style.width = `${percent}%`;
-
-    const container = document.getElementById('taskList');
-    container.innerHTML = '';
-
-    tasks.forEach((task, index) => {
-      const card = document.createElement('div');
-      card.className = 'task-card';
-
-      card.innerHTML = `
-        <div class="task-header">
-          <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
-          <div class="task-title-area">
-            <div class="task-title">${task.title}</div>
-          </div>
-          <div class="task-actions">
-            <button class="btn-action" onclick="openTaskModal('${task.id}')">編集</button>
-            <button class="btn-action" onclick="deleteTask('${task.id}')">削除</button>
-          </div>
+    taskCard.innerHTML = `
+      <div class="task-header">
+        <input type="checkbox" id="${taskId}" class="task-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTask('${taskId}')">
+        <div class="task-info">
+          <input type="text" class="custom-task-input" value="${escapeHtml(savedCustomTitle)}" onchange="updateTaskText('${taskId}', 'title', this.value)" placeholder="タスク名">
+          <div class="task-meta-line meta-trigger">⚡ <b>きっかける:</b> <input type="text" class="custom-task-input" style="display:inline; width:70%; margin:0;" value="${escapeHtml(savedCustomTrigger)}" onchange="updateTaskText('${taskId}', 'trigger', this.value)" placeholder="きっかけ"></div>
+          <div class="task-meta-line meta-effect">✨ <b>効果:</b> <input type="text" class="custom-task-input" style="display:inline; width:70%; margin:0;" value="${escapeHtml(savedCustomEffect)}" onchange="updateTaskText('${taskId}', 'effect', this.value)" placeholder="効果"></div>
         </div>
-        
-        <div class="task-details-list">
-          <div class="info-row">
-            <span class="info-label">きっかけ:</span>
-            <span class="info-val">${task.trigger || '未設定'}</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">部位/効果:</span>
-            <span class="info-val">${task.effect || '未設定'}</span>
-          </div>
-        </div>
+      </div>
+      <button class="guide-toggle" onclick="toggleGuide('${taskId}')">
+        <span>📖 ガイド・ポイント</span>
+        <span id="arrow_${taskId}">▼</span>
+      </button>
+      <div id="guide_${taskId}" class="guide-content">${escapeHtml(task.guide)}</div>
+    `;
 
-        ${task.guide ? `
-        <details class="task-accordion">
-          <summary>▼ やり方・コツを見る</summary>
-          <div class="accordion-content">${task.guide}</div>
-        </details>
-        ` : ''}
-      `;
-      container.appendChild(card);
-    });
+    taskList.appendChild(taskCard);
+  });
+
+  updateProgress();
+}
+
+// チェックボックスの変更と保存
+function toggleTask(taskId) {
+  const cb = document.getElementById(taskId);
+  localStorage.setItem(`cb_${taskId}`, cb.checked);
+  updateProgress();
+}
+
+// テキスト内容の編集と保存
+function updateTaskText(taskId, field, value) {
+  localStorage.setItem(`${field}_${taskId}`, value);
+}
+
+// ガイドの折りたたみ切り替え
+function toggleGuide(taskId) {
+  const guide = document.getElementById(`guide_${taskId}`);
+  const arrow = document.getElementById(`arrow_${taskId}`);
+  if (guide.classList.contains('open')) {
+    guide.classList.remove('open');
+    arrow.textContent = '▼';
+  } else {
+    guide.classList.add('open');
+    arrow.textContent = '▲';
   }
+}
 
-  // タスク完了トグル
-  function toggleTask(taskId) {
-    const tasks = getTasksForDate(selectedDateStr);
-    const target = tasks.find(t => t.id === taskId);
-    if (target) {
-      target.completed = !target.completed;
-      renderTasks();
-      renderCalendar();
-    }
-  }
+// 進捗度（%）の計算
+function updateProgress() {
+  let totalTasks = 14 * 3;
+  let completedTasks = 0;
 
-  // タスク削除
-  function deleteTask(taskId) {
-    let tasks = getTasksForDate(selectedDateStr);
-    customTasks[selectedDateStr] = tasks.filter(t => t.id !== taskId);
-    renderTasks();
-    renderCalendar();
-  }
-
-  // モーダル操作：タスク
-  function openTaskModal(taskId) {
-    editingTaskId = taskId;
-    const tasks = getTasksForDate(selectedDateStr);
-
-    if (taskId) {
-      const t = tasks.find(item => item.id === taskId);
-      document.getElementById('taskModalTitle').innerText = "タスクの編集";
-      document.getElementById('modalTaskTitle').value = t.title || '';
-      document.getElementById('modalTaskTrigger').value = t.trigger || '';
-      document.getElementById('modalTaskEffect').value = t.effect || '';
-      document.getElementById('modalTaskGuide').value = t.guide || '';
-    } else {
-      document.getElementById('taskModalTitle').innerText = "新しいタスクの追加";
-      document.getElementById('modalTaskTitle').value = '';
-      document.getElementById('modalTaskTrigger').value = '';
-      document.getElementById('modalTaskEffect').value = '';
-      document.getElementById('modalTaskGuide').value = '';
-    }
-    document.getElementById('taskModal').classList.remove('hidden');
-  }
-
-  function closeTaskModal() {
-    document.getElementById('taskModal').classList.add('hidden');
-  }
-
-  function saveTaskModal() {
-    const title = document.getElementById('modalTaskTitle').value.trim();
-    if (!title) return;
-
-    const trigger = document.getElementById('modalTaskTrigger').value.trim();
-    const effect = document.getElementById('modalTaskEffect').value.trim();
-    const guide = document.getElementById('modalTaskGuide').value.trim();
-
-    let tasks = getTasksForDate(selectedDateStr);
-
-    if (editingTaskId) {
-      const t = tasks.find(item => item.id === editingTaskId);
-      if (t) {
-        t.title = title;
-        t.trigger = trigger;
-        t.effect = effect;
-        t.guide = guide;
+  for (let w = 1; w <= 14; w++) {
+    for (let t = 0; t < 3; t++) {
+      if (localStorage.getItem(`cb_w${w}_t${t}`) === 'true') {
+        completedTasks++;
       }
-    } else {
-      tasks.push({
-        id: 'custom_' + Date.now(),
-        title: title,
-        trigger: trigger,
-        effect: effect,
-        guide: guide,
-        completed: false
-      });
     }
-
-    closeTaskModal();
-    renderTasks();
-    renderCalendar();
   }
 
-  // モーダル操作：目標
-  function openTargetModal() {
-    document.getElementById('targetInput').value = targetGoal;
-    document.getElementById('targetModal').classList.remove('hidden');
-  }
+  const percent = Math.round((completedTasks / totalTasks) * 100);
+  document.getElementById('progressBadge').textContent = `進捗: ${percent}%`;
+}
 
-  function closeTargetModal() {
-    document.getElementById('targetModal').classList.add('hidden');
-  }
-
-  function saveTarget() {
-    const val = document.getElementById('targetInput').value.trim();
-    if (val) {
-      targetGoal = val;
-      document.getElementById('targetText').innerText = targetGoal;
-    }
-    closeTargetModal();
-  }
+// エスケープ処理
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 </script>
 
 </body>
 </html>
-
